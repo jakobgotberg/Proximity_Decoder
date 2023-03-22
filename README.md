@@ -1,4 +1,4 @@
-##Assignment - SW Engineering
+## Assignment - SW Engineering
 This program collects real-time data from TCP server and relays data 
 to STDOUT every 1.5 second. All data is relayed, only a color code is appended to each package.
 
