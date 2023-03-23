@@ -19,8 +19,21 @@ void err_exit(const char *msg)
 
 void * printer_task(void *args)
 {
-    printer_struct *ts = (printer_struct*) args;
-    print_data(ts->count, ts->coordinate_array);
+    std::chrono::high_resolution_clock::time_point timer;
+    std::chrono::duration<double> diff;
+    printer_struct *ps = (printer_struct*) args;
+    timer = std::chrono::high_resolution_clock::now();
+    while (true)
+    {
+        std::chrono::high_resolution_clock::time_point time_stamp 
+            = std::chrono::high_resolution_clock::now(); 
+        diff = std::chrono::duration_cast<std::chrono::milliseconds>(time_stamp - timer);
+        if (diff.count() >= OUTPUT_DELAY_MS)
+        {
+            print_data(ps->count, ps->coordinate_array);
+            timer = std::chrono::high_resolution_clock::now();
+        }
+    }
     return NULL;
 }
 

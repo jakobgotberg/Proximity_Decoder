@@ -36,9 +36,6 @@ int main(int argc, char** argv)
     ps->count = &count;
     ps->coordinate_array = coordinate_array;
 
-    std::chrono::high_resolution_clock::time_point timer;
-    std::chrono::duration<double> diff;
-
     pthread_t printer;
     pthread_attr_t printer_attr;
     pthread_attr_init(&printer_attr);
@@ -54,18 +51,9 @@ int main(int argc, char** argv)
     if (connect(socket_fd, (struct sockaddr*)&server, sizeof(server)) == -1) 
         err_exit("Connecting to server failed");
 
-    timer = std::chrono::high_resolution_clock::now();
+    pthread_create(&printer, &printer_attr, printer_task, (void *) ps);
     while (true) 
     {
-        std::chrono::high_resolution_clock::time_point time_stamp 
-            = std::chrono::high_resolution_clock::now(); 
-        diff = std::chrono::duration_cast<std::chrono::milliseconds>(time_stamp - timer);
-        if (diff.count() >= OUTPUT_DELAY_MS)
-        {
-            pthread_create(&printer, &printer_attr, printer_task, (void *) ps);
-            timer = std::chrono::high_resolution_clock::now();
-        }
-        
         read_bytes = recv(socket_fd, buffer, sizeof(buffer), 0);
         if (read_bytes == -1) err_exit("Communication with server failed");
 
