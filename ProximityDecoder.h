@@ -19,9 +19,10 @@
 #define PORT                   5463
 #define BUFF_SIZE              1024
 #define ARRAY_SIZE             256
-#define OUTPUT_DELAY_MS        1.5
 #define TARGET_COORDINATE      150
 
+const int OUTPUT_DELAY_SEC = 1;
+const int OUTPUT_DELAY_NSEC = 500000000;
 const uint32_t COLOR_RED =     0x1b5b316d;
 const uint32_t COLOR_YELLOW =  0x1b5b336d;
 const uint32_t COLOR_GREEN =   0x1b5b326d;

@@ -4,6 +4,7 @@
  * Date: 22 Mars 2023
  */
 #include "ProximityDecoder.h"
+#include <ctime>
 
 const std::regex pattern("^ID=(\\d+);X=(\\d+);Y=(\\d+);TYPE=(\\d)");
 static pthread_mutex_t coordinate_array_lock = PTHREAD_MUTEX_INITIALIZER;
@@ -19,20 +20,12 @@ void err_exit(const char *msg)
 
 void * printer_task(void *args)
 {
-    std::chrono::high_resolution_clock::time_point timer;
-    std::chrono::duration<double> diff;
     printer_struct *ps = (printer_struct*) args;
-    timer = std::chrono::high_resolution_clock::now();
+    struct timespec sleep_time = {OUTPUT_DELAY_SEC, OUTPUT_DELAY_NSEC};
     while (true)
     {
-        std::chrono::high_resolution_clock::time_point time_stamp 
-            = std::chrono::high_resolution_clock::now(); 
-        diff = std::chrono::duration_cast<std::chrono::milliseconds>(time_stamp - timer);
-        if (diff.count() >= OUTPUT_DELAY_MS)
-        {
-            print_data(ps->count, ps->coordinate_array);
-            timer = std::chrono::high_resolution_clock::now();
-        }
+        nanosleep(&sleep_time, NULL);
+        print_data(ps->count, ps->coordinate_array);
     }
     return NULL;
 }
