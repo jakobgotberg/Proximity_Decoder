@@ -17,7 +17,6 @@ void err_exit(const char *msg)
     exit(EXIT_FAILURE);
 }
 
-const int OUTPUT_DELAY_MS = 1500;
 void * printer_task(void *args)
 {
     printer_struct *ps = (printer_struct*) args;
